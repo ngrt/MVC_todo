@@ -19,27 +19,32 @@ class tasksController extends Controller
             require(ROOT . 'Models/Task.php');
 
             $task= new Task();
+
             if ($task->create($_POST["title"], $_POST["description"]))
             {
                 header("Location: " . WEBROOT . "tasks/index");
             }
         }
+
         $this->render("create");
     }
 
-    function store()
+    function edit($id)
     {
+        require(ROOT . 'Models/Task.php');
+        $task= new Task();
 
-    }
+        $d["task"] = $task->showTask($id);
 
-    function edit()
-    {
-        $this->render("index");
-    }
-
-    function update()
-    {
-
+        if (isset($_POST["title"]))
+        {
+            if ($task->edit($id, $_POST["title"], $_POST["description"]))
+            {
+                header("Location: " . WEBROOT . "tasks/index");
+            }
+        }
+        $this->set($d);
+        $this->render("edit");
     }
 
     function delete($id)
